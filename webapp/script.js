@@ -1,6 +1,5 @@
 // the data to be displayed
 var data;
-
 var types;
 
 // current date
@@ -58,15 +57,14 @@ var bodies = new Array();
 function fileLoaded() {
     completed -= 1;
     if (completed === 0) {
-        data.sort(compareProd);
-        makeLists();
-        createRows();
+        createLists();
         drawHeader();
-        drawLists();
+        updateLists();
     }
 }
 
 function loadFiles() {
+    data = new Data();
     completed = 3;
     $.getJSON("languages/" + language).done(function(json) {
         strings = json;
@@ -77,14 +75,14 @@ function loadFiles() {
     });
 
     $.getJSON("regions/" + region).done(function(json) {
-        data = json;
+        data.setData(json);
         fileLoaded();
     }).fail(function(jqxhr, textStatus, error) {
         console.log("error");
     });
 
     $.getJSON("types.json").done(function(json) {
-        types = json;
+        data.setTypes(json);
         fileLoaded();
     }).fail(function(jqxhr, textStatus, error) {
         console.log("error");
@@ -104,109 +102,26 @@ function loadSetup() {
     });
 }
 
-function makeLists() {
-    makeList(data, document.getElementById("season"), season, 0);
-    makeList(data, document.getElementById("house"), house, 1);
-    makeList(data, document.getElementById("store"), store, 2);
-    makeList(data, document.getElementById("not"), not, 3);
+var seasonTable;
+var houseTable;
+var storeTable;
+var notTable;
+
+function createLists() {
+    seasonTable = new Table("season", season);
+    houseTable = new Table("house", house);
+    storeTable = new Table("store", store);
+    notTable = new Table("not", not);
 }
 
-function drawLists() {
+function updateLists() {
     var startTime = new Date().getTime();
-    fillList(data, document.getElementById("season"), season, 0);
-    fillList(data, document.getElementById("house"), house, 1);
-    fillList(data, document.getElementById("store"), store, 2);
-    fillList(data, document.getElementById("not"), not, 3);
+    seasonTable.updateBodies();
+    houseTable.updateBodies();
+    storeTable.updateBodies();
+    notTable.updateBodies();
     drawBars();
     console.log(new Date().getTime() - startTime);
-}
-
-function makeList(data, container, code, index) {
-    var header = document.createElement("h2");
-    header.appendChild(document.createTextNode(strings.content_titles[
-        jahr_classes[code]]));
-    container.appendChild(header);
-
-    var table = document.createElement("table");
-    table.className = "list";
-
-    bodies[index] = new Array();
-
-    for (var t = 0; t < classes.length; t++) {
-        var tHead = document.createElement("thead");
-        var tBody = document.createElement("tbody");
-        table.appendChild(tHead);
-        table.appendChild(tBody);
-        drawTableHeader(tHead, classes[t]);
-        bodies[index][t] = tBody;
-    }
-    container.appendChild(table);
-}
-
-function fillList(data, container, code, index) {
-
-    for (var t = 0; t < classes.length; t++) {
-        fillBody(data, code, t, bodies[index][t]);
-    }
-}
-
-function fillBody(data, code, t, tBody) {
-    while (tBody.firstChild) {
-        tBody.removeChild(tBody.firstChild);
-    }
-    var frag = document.createDocumentFragment();
-    for (var i = 0; i < data.length; i++) {
-        if (data[i].jahr[index] == code && getType(data[i].name) == t) {
-            frag.appendChild(rows[i]);
-        }
-    }
-    tBody.appendChild(frag);
-}
-
-function createRows() {
-    for (var i = 0; i < data.length; i++) {
-        var row = document.createElement("tr");
-        var nameCell = document.createElement("td");
-        nameCell.className = "name";
-        nameCell.appendChild(document.createTextNode(getName(data[i])));
-        row.appendChild(nameCell);
-        for (var j = 0; j < data[i].jahr.length; j++) {
-            var cell = document.createElement("td");
-            var div = document.createElement("div");
-            div.className = "overview_elem " + jahr_classes[data[i].jahr[j]];
-            cell.appendChild(div);
-            row.appendChild(cell);
-        }
-        rows[i] = row;
-    }
-}
-
-function drawTableHeader(tHead, type) {
-    var typeHeader = document.createElement("tr");
-    typeHeader.classNamen = "type_header";
-    var typeCell = document.createElement("td");
-    typeCell.className = "type_" + type;
-    typeCell.colSpan = "100%";
-
-    var title = document.createElement("h3");
-    title.appendChild(document.createTextNode(strings.types[type]))
-    typeCell.appendChild(title);
-    typeHeader.appendChild(typeCell);
-
-    var tableHeader = document.createElement("tr");
-    tableHeader.className = "table_header";
-    tableHeader.appendChild(document.createElement("td"));
-    for (var i = 0; i < strings.months.length; i++) {
-        var cell = document.createElement("td");
-        cell.colSpan = "2";
-        cell.appendChild(document.createTextNode(strings.months[i]));
-        if (i == date.getMonth()) {
-            cell.className = "current";
-        }
-        tableHeader.appendChild(cell);
-    }
-    tHead.appendChild(typeHeader);
-    tHead.appendChild(tableHeader);
 }
 
 function drawBar(parent) {
@@ -319,7 +234,7 @@ function addDraggable(bar) {
                 index = new_index;
                 setTimeout(function() {
                     if (index == new_index) {
-                        drawLists();
+                        updateLists();
                     }
                 }, 150);
             }
@@ -388,3 +303,120 @@ function setRegion(reg) {
     localStorage.region = region;
     loadFiles();
 }
+
+var Data = function() {
+    this.data = data;
+    this.type_keys = ["vegetables", "fruits"];
+};
+
+Data.prototype.setData = function(data) {
+    this.data = data;
+    this.data.sort(function(a, b) {
+        a = getName(a).toLowerCase();
+        a = a.replace(/ä/g, 'a');
+        a = a.replace(/ö/g, 'o');
+        a = a.replace(/ü/g, 'u');
+
+        b = getName(b).toLowerCase();
+        b = b.replace(/ä/g, 'a');
+        b = b.replace(/ö/g, 'o');
+        b = b.replace(/ü/g, 'u');
+        return (a > b) ? 1 : -1;
+    });
+    this.createRows();
+};
+
+Data.prototype.setTypes = function(types) {
+    this.types = types;
+};
+
+Data.prototype.isValid = function(index, month, clazz, type) {
+    return this.data[index].jahr[month] == clazz && this.types[this.data[
+        index].name] == type;
+};
+
+Data.prototype.createRows = function() {
+    this.rows = new Array(this.data.length);
+    for (var i = 0; i < this.data.length; i++) {
+        var row = document.createElement("tr");
+        var nameCell = document.createElement("td");
+        nameCell.className = "name";
+        nameCell.appendChild(document.createTextNode(getName(this.data[i])));
+        row.appendChild(nameCell);
+        for (var j = 0; j < this.data[i].jahr.length; j++) {
+            var cell = document.createElement("td");
+            var div = document.createElement("div");
+            div.className = "overview_elem " + jahr_classes[this.data[i].jahr[j]];
+            cell.appendChild(div);
+            row.appendChild(cell);
+        }
+        this.rows[i] = row;
+    }
+};
+
+var Table = function(id, code) {
+    this.code = code;
+    this.container = document.getElementById(id);
+    this.bodies = new Array(data.type_keys.length);
+
+    var header = document.createElement("h2");
+    header.appendChild(document.createTextNode(strings.content_titles[
+        jahr_classes[code]]));
+    this.container.appendChild(header);
+
+    var table = document.createElement("table");
+    table.className = "list";
+
+    for (var t = 0; t < data.type_keys.length; t++) {
+        var tHead = document.createElement("thead");
+        var tBody = document.createElement("tbody");
+        table.appendChild(tHead);
+        table.appendChild(tBody);
+        this.drawTableHeader(tHead, classes[t]);
+        this.bodies[t] = tBody;
+    }
+    this.container.appendChild(table);
+};
+
+Table.prototype.drawTableHeader = function(tHead, type) {
+    var typeHeader = document.createElement("tr");
+    typeHeader.classNamen = "type_header";
+    var typeCell = document.createElement("td");
+    typeCell.className = "type_" + type;
+    typeCell.colSpan = "100%";
+
+    var title = document.createElement("h3");
+    title.appendChild(document.createTextNode(strings.types[type]))
+    typeCell.appendChild(title);
+    typeHeader.appendChild(typeCell);
+
+    var tableHeader = document.createElement("tr");
+    tableHeader.className = "table_header";
+    tableHeader.appendChild(document.createElement("td"));
+    for (var i = 0; i < strings.months.length; i++) {
+        var cell = document.createElement("td");
+        cell.colSpan = "2";
+        cell.appendChild(document.createTextNode(strings.months[i]));
+        if (i == date.getMonth()) {
+            cell.className = "current";
+        }
+        tableHeader.appendChild(cell);
+    }
+    tHead.appendChild(typeHeader);
+    tHead.appendChild(tableHeader);
+};
+
+Table.prototype.updateBodies = function() {
+    for (var t = 0; t < data.type_keys.length; t++) {
+        while (this.bodies[t].firstChild) {
+            this.bodies[t].removeChild(this.bodies[t].firstChild);
+        }
+        var frag = document.createDocumentFragment();
+        for (var i = 0; i < data.data.length; i++) {
+            if (data.isValid(i, index, this.code, t)) {
+                frag.appendChild(data.rows[i]);
+            }
+        }
+        this.bodies[t].appendChild(frag);
+    }
+};
