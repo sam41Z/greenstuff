@@ -52,10 +52,15 @@ $(window).resize(function() {
 
 var completed = 3;
 
+var rows = new Array();
+var bodys = new Array();
+
 function fileLoaded() {
     completed -= 1;
     if (completed === 0) {
         data.sort(compareProd);
+        makeLists();
+        createRows();
         drawHeader();
         drawLists();
     }
@@ -99,20 +104,24 @@ function loadSetup() {
     });
 }
 
+function makeLists() {
+    makeList(data, document.getElementById("season"), season, 0);
+    makeList(data, document.getElementById("house"), house, 1);
+    makeList(data, document.getElementById("store"), store, 2);
+    makeList(data, document.getElementById("not"), not, 3);
+}
+
 function drawLists() {
     var startTime = new Date().getTime();
-    makeList(data, document.getElementById("season"), season);
-    makeList(data, document.getElementById("house"), house);
-    makeList(data, document.getElementById("store"), store);
-    makeList(data, document.getElementById("not"), not);
+    fillList(data, document.getElementById("season"), season, 0);
+    fillList(data, document.getElementById("house"), house, 1);
+    fillList(data, document.getElementById("store"), store, 2);
+    fillList(data, document.getElementById("not"), not, 3);
     drawBars();
     console.log(new Date().getTime() - startTime);
 }
 
-function makeList(data, container, code) {
-    while(container.firstChild) {
-        container.removeChild(container.firstChild);
-    }
+function makeList(data, container, code, index) {
     var header = document.createElement("h2");
     header.appendChild(document.createTextNode(strings.content_titles[
         jahr_classes[code]]));
@@ -121,38 +130,58 @@ function makeList(data, container, code) {
     var table = document.createElement("table");
     table.className = "list";
 
+    bodys[index] = new Array();
+
     for (var t = 0; t < classes.length; t++) {
         var tHead = document.createElement("thead");
         var tBody = document.createElement("tbody");
         table.appendChild(tHead);
         table.appendChild(tBody);
         drawTableHeader(tHead, classes[t]);
-        fillBody(data, code, t, tBody);
+        bodys[index][t] = tBody;
     }
     container.appendChild(table);
 }
 
-function fillBody(data, code, t, tBody) {
-    for (var i = 0; i < data.length; i++) {
-        if (data[i].jahr[index] == code && getType(data[i].name) == t) {
-            var row = document.createElement("tr");
-            var nameCell = document.createElement("td");
-            nameCell.className = "name";
-            nameCell.appendChild(document.createTextNode(getName(data[i])));
-            row.appendChild(nameCell);
-            for (var j = 0; j < data[i].jahr.length; j++) {
-                var cell = document.createElement("td");
-                var div = document.createElement("div");
-                div.className = "overview_elem " + jahr_classes[data[i].jahr[j]];
-                cell.appendChild(div);
-                row.appendChild(cell);
-            }
-            tBody.appendChild(row);
-        }
+function fillList(data, container, code, index) {
+
+    for (var t = 0; t < classes.length; t++) {
+        fillBody(data, code, t, bodys[index][t]);
     }
 }
 
-function drawTableHeader(tHead, type) { 
+function fillBody(data, code, t, tBody) {
+    while (tBody.firstChild) {
+        tBody.removeChild(tBody.firstChild);
+    }
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].jahr[index] == code && getType(data[i].name) == t) {
+            frag.appendChild(rows[i]);
+        }
+    }
+    tBody.appendChild(frag);
+}
+
+function createRows() {
+    for (var i = 0; i < data.length; i++) {
+        var row = document.createElement("tr");
+        var nameCell = document.createElement("td");
+        nameCell.className = "name";
+        nameCell.appendChild(document.createTextNode(getName(data[i])));
+        row.appendChild(nameCell);
+        for (var j = 0; j < data[i].jahr.length; j++) {
+            var cell = document.createElement("td");
+            var div = document.createElement("div");
+            div.className = "overview_elem " + jahr_classes[data[i].jahr[j]];
+            cell.appendChild(div);
+            row.appendChild(cell);
+        }
+        rows[i] = row;
+    }
+}
+
+function drawTableHeader(tHead, type) {
     var typeHeader = document.createElement("tr");
     typeHeader.classNamen = "type_header";
     var typeCell = document.createElement("td");
@@ -172,7 +201,7 @@ function drawTableHeader(tHead, type) {
         cell.colSpan = "2";
         cell.appendChild(document.createTextNode(strings.months[i]));
         if (i == date.getMonth()) {
-           cell.className = "current";
+            cell.className = "current";
         }
         tableHeader.appendChild(cell);
     }
@@ -292,7 +321,7 @@ function addDraggable(bar) {
                     if (index == new_index) {
                         drawLists();
                     }
-                }, 50);
+                }, 150);
             }
             drawBars();
         },
