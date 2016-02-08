@@ -53,7 +53,7 @@ $(window).resize(function() {
 var completed = 3;
 
 var rows = new Array();
-var bodys = new Array();
+var bodies = new Array();
 
 function fileLoaded() {
     completed -= 1;
@@ -130,7 +130,7 @@ function makeList(data, container, code, index) {
     var table = document.createElement("table");
     table.className = "list";
 
-    bodys[index] = new Array();
+    bodies[index] = new Array();
 
     for (var t = 0; t < classes.length; t++) {
         var tHead = document.createElement("thead");
@@ -138,7 +138,7 @@ function makeList(data, container, code, index) {
         table.appendChild(tHead);
         table.appendChild(tBody);
         drawTableHeader(tHead, classes[t]);
-        bodys[index][t] = tBody;
+        bodies[index][t] = tBody;
     }
     container.appendChild(table);
 }
@@ -146,7 +146,7 @@ function makeList(data, container, code, index) {
 function fillList(data, container, code, index) {
 
     for (var t = 0; t < classes.length; t++) {
-        fillBody(data, code, t, bodys[index][t]);
+        fillBody(data, code, t, bodies[index][t]);
     }
 }
 
