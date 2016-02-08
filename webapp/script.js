@@ -200,7 +200,6 @@ function drawBar(parent) {
         if (bar_pos > 0) {
             left = bar_pos;
         } else {
-            console.log(days_of_month + " " + date.getDate());
             left = current.offset().left + (current.width() - bar.width()) /
                 days_of_month * date.getDate();
         }
