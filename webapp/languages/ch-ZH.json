@@ -1,0 +1,106 @@
+{
+    "legend": {
+        "season":"Säson",
+        "house":"Gwächshuus",
+        "store": "Lagär",
+        "not":"nöd Säson"
+    },
+
+    "navigation":{
+        "language":"Sprach",
+        "region":"Region"
+    },
+
+    "months":["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
+
+    "content_titles": {
+        "season":"Das isch ez Säson:",
+        "house":"Das wachst ez im Huus:",
+        "store":"Das chunnt us em Lager:",
+        "not":"Näinäinäi, das chaufsch ez abr sichr nöd"
+    },
+
+    "types":{
+        "fruits":"Frücht",
+        "vegetables":"Gmüäs"
+    },
+
+    "title":"Säson Tabälä",
+
+    "region_names":{
+        "middle_europe":"Mitteleuropa"
+    },
+
+    "food_names":{
+        "apple":"Öpfel",
+        "apricot":"Aprikose",
+        "artichoke":"Artischocke",
+        "asparagus":"Sparglä (wiis/grüän)",
+        "batavia_lettuce":"Batavia",
+        "bear's_garlic":"Bärlauch",
+        "beetroot":"Rande",
+        "black_salsify":"Schwarzwurzle",
+        "borecole":"Grüänchohl",
+        "broccoli":"Broccoli",
+        "brussels_sprouts":"Röslichöhl",
+        "button_mushroom":"Champignon",
+        "cabbage":"Chohl",
+        "carrot":"Rüäbli",
+        "cauliflower":"Bluämächohl",
+        "celeriac":"Chnoläsellerie",
+        "celery":"Stangesellerie",
+        "cherry":"Chriäsi",
+        "chestnut":"Kastanie",
+        "chicory":"Chiccorée",
+        "chinese_cabbage":"Chinachohl",
+        "cucumber":"Gurke",
+        "curly_kale":"Fäderchohl",
+        "damson":"Zwätschgä",
+        "eggplant":"Obergine",
+        "endive":"Endivie",
+        "fennel":"Fänchel",
+        "field_salad":"Fäldsalat",
+        "fig":"Fiige",
+        "garlic":"Chnobli",
+        "grape":"Truube",
+        "green_bean":"Grüäni Bohne",
+        "green_onion":"Früäligszwiblä",
+        "iceberg_lettuce":"Iisbärgsalat",
+        "kiwi":"Kiwi",
+        "kohlrabi":"Cholräbli",
+        "lamb's_lettuce":"Nüsslisalat",
+        "leek":"Lauch",
+        "lettuce":"Chopfsalat",
+        "lollo_lettuce":"Lollo",
+        "mangold":"Chrutstiil",
+        "melon":"Melone",
+        "mirabelle":"Mirabelle",
+        "nectarine":"Nektarine",
+        "onion":"Zwiblä",
+        "pak-choi":"Pak-Choi",
+        "paprika":"Peperoni",
+        "parsley_root":"Peterliwurzlä",
+        "parsnip":"Pastinake",
+        "peach":"Pfirsich",
+        "pear":"Birä",
+        "plum":"Pfluumä",
+        "potato":"Härdöpfel",
+        "pumpkin":"Chürbis",
+        "quince":"Quitte",
+        "radicchio":"Cicorino rosso",
+        "radish":"Rettich",
+        "red_oak_leaf_lettuce":"Eichblattsalat",
+        "rhubarb":"Rhabarber",
+        "rocket":"Rucola",
+        "romaine_lettuce":"Lattich",
+        "savoy":"Wirz",
+        "snow_pea":"Ärbsli",
+        "spinach":"Spinat",
+        "strawberry":"Erdbeeri",
+        "sugarloaf":"Zuckerhuät",
+        "tomato":"Tomate",
+        "walnut":"Baumnuss",
+        "zucchini":"Zucchetti"
+    }
+
+}
