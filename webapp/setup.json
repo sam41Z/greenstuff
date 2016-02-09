@@ -19,5 +19,9 @@
 			"name":"middle_europe",
 			"file":"middle_europe_data.json"
 		}
-	]
+	],
+
+	"labels": ["not" , "store", "house", "season"],
+
+	"types": ["vegetables", "fruits"]
 }
