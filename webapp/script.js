@@ -1,36 +1,13 @@
+var setup;
+
 // the data to be displayed
 var data;
-var types;
 
 // current date
 var date = new Date()
 var days_of_month = new Date(date.getFullYear(), date.getMonth() - 1, 0).getDate();
 // current index
 var index = date.getMonth() * 2 + ((date.getDay <= 15) ? 0 : 1);
-
-// codes for classes
-var season = 3;
-var house = 2;
-var store = 1;
-var not = 0;
-
-// css classes for the four jahr classes
-var jahr_classes = new Array();
-jahr_classes[season] = "season";
-jahr_classes[house] = "house";
-jahr_classes[store] = "store";
-jahr_classes[not] = "not";
-
-// the different type in datas list
-var classes = ["vegetables", "fruits"];
-
-// all available languages
-var languages;
-// current language
-var language;
-
-var regions;
-var region;
 
 // all strings
 var strings;
@@ -51,9 +28,6 @@ $(window).resize(function() {
 
 var completed = 3;
 
-var rows = new Array();
-var bodies = new Array();
-
 function fileLoaded() {
     completed -= 1;
     if (completed === 0) {
@@ -66,7 +40,7 @@ function fileLoaded() {
 function loadFiles() {
     data = new Data();
     completed = 3;
-    $.getJSON("languages/" + language).done(function(json) {
+    $.getJSON("languages/" + setup.languageFile).done(function(json) {
         strings = json;
         $("title").text(strings.title);
         fileLoaded();
@@ -74,7 +48,7 @@ function loadFiles() {
         console.log("error");
     });
 
-    $.getJSON("regions/" + region).done(function(json) {
+    $.getJSON("regions/" + setup.regionFile).done(function(json) {
         data.setData(json);
         fileLoaded();
     }).fail(function(jqxhr, textStatus, error) {
@@ -91,13 +65,7 @@ function loadFiles() {
 
 function loadSetup() {
     $.getJSON("setup.json", function(data) {
-        languages = data.languages;
-        //local storage
-        setupLanguage();
-        //local storage
-        regions = data.regions;
-        region = data.regions[0].file;
-
+        setup = new Setup(data);
         loadFiles();
     });
 }
@@ -108,10 +76,10 @@ var storeTable;
 var notTable;
 
 function createLists() {
-    seasonTable = new Table("season", season);
-    houseTable = new Table("house", house);
-    storeTable = new Table("store", store);
-    notTable = new Table("not", not);
+    seasonTable = new Table(setup.labels[3]);
+    houseTable = new Table(setup.labels[2]);
+    storeTable = new Table(setup.labels[1]);
+    notTable = new Table(setup.labels[0]);
 }
 
 function updateLists() {
@@ -179,30 +147,30 @@ function drawLegend() {
 function drawNav() {
     var list = "";
     var selected = "";
-    for (var i = 0; i < languages.length; i++) {
+    for (var i = 0; i < setup.languages.length; i++) {
 
-        if (language == languages[i].file) {
+        if (setup.languageFile == setup.languages[i].file) {
             selected = "class=\"dropdown_selected\""
         } else {
             selected = "";
         }
         list += "<li><a href=\"#\" " + selected + " onclick=\"setLanguage('" +
-            languages[i].file + "')\">" + languages[i].name + "</a></li>";
+            setup.languages[i].file + "')\">" + setup.languages[i].name + "</a></li>";
     }
     $("#language_selection").empty();
     $("#language_selection").append(list);
 
     list = "";
     selected = "";
-    for (var i = 0; i < regions.length; i++) {
+    for (var i = 0; i < setup.regions.length; i++) {
 
-        if (region == regions[i].file) {
+        if (setup.region == setup.regions[i].file) {
             selected = "class=\"dropdown_selected\""
         } else {
             selected = "";
         }
         list += "<li><a href=\"#\" " + selected + " onclick=\"setRegion('" +
-            regions[i].file + "')\">" + strings.region_names[regions[i].name] +
+            setup.regions[i].file + "')\">" + strings.region_names[setup.regions[i].name] +
             "</a></li>";
     }
     $("#region_selection").empty();
@@ -247,66 +215,59 @@ function addDraggable(bar) {
     });
 }
 
-function compareProd(a, b) {
-    a = getName(a).toLowerCase();
-    a = a.replace(/ä/g, 'a');
-    a = a.replace(/ö/g, 'o');
-    a = a.replace(/ü/g, 'u');
-
-    b = getName(b).toLowerCase();
-    b = b.replace(/ä/g, 'a');
-    b = b.replace(/ö/g, 'o');
-    b = b.replace(/ü/g, 'u');
-    return (a > b) ? 1 : -1;
-}
-
 function getName(item) {
     return strings.food_names[item.name];
 }
 
-function getType(name) {
-    return types[name];
-}
 
-function setupLanguage() {
-    language = languages[0].file;
+var Setup = function(data) {
+    this.languages = data.languages;
+    this.setupLanguage();
+
+    this.regions = data.regions;
+    this.setupRegions();
+
+    this.labels = data.labels;
+    this.types = data.types;
+};
+
+Setup.prototype.setupLanguage = function() {
+    this.languageFile = this.languages[0].file;
     //localStorage.clear();
-    if (localStorage.language) {
-        language = localStorage.language;
+    if (localStorage.languageFile) {
+        this.languageFile = localStorage.languageFile;
     } else {
         var language_code = window.navigator.language;
-        for (var i = 0; i < languages.length; i++) {
-
-            if (languages[i].file == language_code + ".json") {
-                language = languages[i].file;
+        for (var i = 0; i < this.languages.length; i++) {
+            if (this.languages[i].file == language_code + ".json") {
+                this.languageFile = this.languages[i].file;
                 break;
             }
         }
     }
-}
+};
 
-function setLanguage(lang) {
-    language = lang;
-    localStorage.language = language;
+Setup.prototype.setLanguage = function(lang) {
+    this.languageFile = lang;
+    localStorage.languageFile = this.languageFile;
     loadFiles();
-}
+};
 
-function setupRegions() {
-    region = regions[0].file;
-    if (localStorage.region) {
-        region = localStorage.region;
+Setup.prototype.setupRegions = function() {
+    this.regionFile = this.regions[0].file;
+    if (localStorage.regionFile) {
+        this.regionFile = localStorage.regionFile;
     }
-}
+};
 
-function setRegion(reg) {
-    region = reg;
-    localStorage.region = region;
+Setup.prototype.setRegion = function(reg) {
+    this.regionFile = reg;
+    localStorage.regionFile = this.regionFile;
     loadFiles();
-}
+};
 
 var Data = function() {
     this.data = data;
-    this.type_keys = ["vegetables", "fruits"];
 };
 
 Data.prototype.setData = function(data) {
@@ -330,8 +291,8 @@ Data.prototype.setTypes = function(types) {
     this.types = types;
 };
 
-Data.prototype.isValid = function(index, month, clazz, type) {
-    return this.data[index].jahr[month] == clazz && this.types[this.data[
+Data.prototype.isValid = function(index, month, label, type) {
+    return setup.labels[this.data[index].jahr[month]] == label && data.types[this.data[
         index].name] == type;
 };
 
@@ -346,7 +307,8 @@ Data.prototype.createRows = function() {
         for (var j = 0; j < this.data[i].jahr.length; j++) {
             var cell = document.createElement("td");
             var div = document.createElement("div");
-            div.className = "overview_elem " + jahr_classes[this.data[i].jahr[j]];
+            div.className = "overview_elem " + setup.labels[this.data[i].jahr[
+                j]];
             cell.appendChild(div);
             row.appendChild(cell);
         }
@@ -354,25 +316,24 @@ Data.prototype.createRows = function() {
     }
 };
 
-var Table = function(id, code) {
-    this.code = code;
-    this.container = document.getElementById(id);
-    this.bodies = new Array(data.type_keys.length);
+var Table = function(label) {
+    this.label = label;
+    this.container = document.getElementById(label);
+    this.bodies = new Array(setup.types.length);
 
     var header = document.createElement("h2");
-    header.appendChild(document.createTextNode(strings.content_titles[
-        jahr_classes[code]]));
+    header.appendChild(document.createTextNode(strings.content_titles[label]));
     this.container.appendChild(header);
 
     var table = document.createElement("table");
     table.className = "list";
 
-    for (var t = 0; t < data.type_keys.length; t++) {
+    for (var t = 0; t < setup.types.length; t++) {
         var tHead = document.createElement("thead");
         var tBody = document.createElement("tbody");
         table.appendChild(tHead);
         table.appendChild(tBody);
-        this.drawTableHeader(tHead, classes[t]);
+        this.drawTableHeader(tHead, setup.types[t]);
         this.bodies[t] = tBody;
     }
     this.container.appendChild(table);
@@ -407,13 +368,13 @@ Table.prototype.drawTableHeader = function(tHead, type) {
 };
 
 Table.prototype.updateBodies = function() {
-    for (var t = 0; t < data.type_keys.length; t++) {
+    for (var t = 0; t < setup.types.length; t++) {
         while (this.bodies[t].firstChild) {
             this.bodies[t].removeChild(this.bodies[t].firstChild);
         }
         var frag = document.createDocumentFragment();
         for (var i = 0; i < data.data.length; i++) {
-            if (data.isValid(i, index, this.code, t)) {
+            if (data.isValid(i, index, this.label, t)) {
                 frag.appendChild(data.rows[i]);
             }
         }
