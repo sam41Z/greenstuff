@@ -145,41 +145,54 @@ function drawLegend() {
 }
 
 function drawNav() {
-    var list = "";
-    var selected = "";
+    var langSelection = document.getElementById("language_selection");
+    while (langSelection.firstChild) {
+        langSelection.removeChild(langSelection.firstChild);
+    }
     for (var i = 0; i < setup.languages.length; i++) {
-
+        var item = document.createElement("li");
+        var link = document.createElement("a");
+        link.appendChild(document.createTextNode(setup.languages[i].name));
+        link.href = "#";
         if (setup.languageFile == setup.languages[i].file) {
-            selected = "class=\"dropdown_selected\""
-        } else {
-            selected = "";
+            link.className = "dropdown_selected";
         }
-        list += "<li><a href=\"#\" " + selected + " onclick=\"setLanguage('" +
-            setup.languages[i].file + "')\">" + setup.languages[i].name + "</a></li>";
+        link.onclick = function(j) {
+            return function() {
+                setup.setLanguage(setup.languages[j].file);
+            };
+        }(i);
+        item.appendChild(link);
+        langSelection.appendChild(item);
     }
-    $("#language_selection").empty();
-    $("#language_selection").append(list);
 
-    list = "";
-    selected = "";
+    var regSelection = document.getElementById("region_selection");
+    while (regSelection.firstChild) {
+        regSelection.removeChild(regSelection.firstChild);
+    }
     for (var i = 0; i < setup.regions.length; i++) {
-
+        var item = document.createElement("li");
+        var link = document.createElement("a");
+        link.appendChild(document.createTextNode(strings.region_names[setup.regions[
+            i].name]));
+        link.href = "#";
         if (setup.region == setup.regions[i].file) {
-            selected = "class=\"dropdown_selected\""
-        } else {
-            selected = "";
+            link.className = "dropdown_selected";
         }
-        list += "<li><a href=\"#\" " + selected + " onclick=\"setRegion('" +
-            setup.regions[i].file + "')\">" + strings.region_names[setup.regions[i].name] +
-            "</a></li>";
+        link.onclick = function(j) {
+            return function() {
+                setup.setRegion(setup.regions[j].file);
+            };
+        }(i);
+        item.appendChild(link);
+        regSelection.appendChild(item);
     }
-    $("#region_selection").empty();
-    $("#region_selection").append(list);
 }
 
 function addDraggable(bar) {
     var left = bar.parent().offset().left + $(".name").outerWidth() - 1;
-    var right = bar.parent().offset().left + bar.parent().width() - bar.outerWidth() -
+    var right = bar.parent().offset().left + bar.parent().width() - bar
+        .outerWidth() -
         1;
     var width = right - left + 1;
     bar.draggable({
@@ -196,7 +209,8 @@ function addDraggable(bar) {
                 ui.position.left = right;
             }
             bar_pos = ui.position.left;
-            var new_index = Math.floor((bar_pos - left) * 24 /
+            var new_index = Math.floor((bar_pos - left) *
+                24 /
                 width);
             if (new_index != index) {
                 index = new_index;
@@ -248,6 +262,7 @@ Setup.prototype.setupLanguage = function() {
 };
 
 Setup.prototype.setLanguage = function(lang) {
+    console.log("set lang " + lang);
     this.languageFile = lang;
     localStorage.languageFile = this.languageFile;
     loadFiles();
@@ -292,8 +307,10 @@ Data.prototype.setTypes = function(types) {
 };
 
 Data.prototype.isValid = function(index, month, label, type) {
-    return setup.labels[this.data[index].jahr[month]] == label && data.types[this.data[
-        index].name] == type;
+    return setup.labels[this.data[index].jahr[month]] == label &&
+        data.types[
+            this.data[
+                index].name] == type;
 };
 
 Data.prototype.createRows = function() {
@@ -302,12 +319,14 @@ Data.prototype.createRows = function() {
         var row = document.createElement("tr");
         var nameCell = document.createElement("td");
         nameCell.className = "name";
-        nameCell.appendChild(document.createTextNode(getName(this.data[i])));
+        nameCell.appendChild(document.createTextNode(getName(this.data[
+            i])));
         row.appendChild(nameCell);
         for (var j = 0; j < this.data[i].jahr.length; j++) {
             var cell = document.createElement("td");
             var div = document.createElement("div");
-            div.className = "overview_elem " + setup.labels[this.data[i].jahr[
+            div.className = "overview_elem " + setup.labels[this.data[
+                i].jahr[
                 j]];
             cell.appendChild(div);
             row.appendChild(cell);
@@ -322,7 +341,8 @@ var Table = function(label) {
     this.bodies = new Array(setup.types.length);
 
     var header = document.createElement("h2");
-    header.appendChild(document.createTextNode(strings.content_titles[label]));
+    header.appendChild(document.createTextNode(strings.content_titles[
+        label]));
     this.container.appendChild(header);
 
     var table = document.createElement("table");
