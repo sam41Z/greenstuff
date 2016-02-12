@@ -1,3 +1,4 @@
+// page setup
 var setup;
 
 // the data to be displayed
@@ -146,9 +147,7 @@ function drawLegend() {
 
 function drawNav() {
     var langSelection = document.getElementById("language_selection");
-    while (langSelection.firstChild) {
-        langSelection.removeChild(langSelection.firstChild);
-    }
+    clearElement(langSelection);
     for (var i = 0; i < setup.languages.length; i++) {
         var item = document.createElement("li");
         var link = document.createElement("a");
@@ -167,9 +166,7 @@ function drawNav() {
     }
 
     var regSelection = document.getElementById("region_selection");
-    while (regSelection.firstChild) {
-        regSelection.removeChild(regSelection.firstChild);
-    }
+    clearElement(regSelection);
     for (var i = 0; i < setup.regions.length; i++) {
         var item = document.createElement("li");
         var link = document.createElement("a");
@@ -231,6 +228,12 @@ function addDraggable(bar) {
 
 function getName(item) {
     return strings.food_names[item.name];
+}
+
+function clearElement(elem) {
+    while (elem.firstChild) {
+        elem.removeChild(elem.firstChild);
+    }
 }
 
 
@@ -338,6 +341,7 @@ Data.prototype.createRows = function() {
 var Table = function(label) {
     this.label = label;
     this.container = document.getElementById(label);
+    clearElement(this.container);
     this.bodies = new Array(setup.types.length);
 
     var header = document.createElement("h2");
@@ -389,9 +393,7 @@ Table.prototype.drawTableHeader = function(tHead, type) {
 
 Table.prototype.updateBodies = function() {
     for (var t = 0; t < setup.types.length; t++) {
-        while (this.bodies[t].firstChild) {
-            this.bodies[t].removeChild(this.bodies[t].firstChild);
-        }
+        clearElement(this.bodies[t]);
         var frag = document.createDocumentFragment();
         for (var i = 0; i < data.data.length; i++) {
             if (data.isValid(i, index, this.label, t)) {
