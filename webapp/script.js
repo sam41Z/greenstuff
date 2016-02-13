@@ -89,48 +89,8 @@ function updateLists() {
     houseTable.updateBodies();
     storeTable.updateBodies();
     notTable.updateBodies();
-    drawBars();
+    // drawBars();
     console.log(new Date().getTime() - startTime);
-}
-
-function drawBar(parent) {
-    var all = $(parent + " .current");
-    all.each(function(i) {
-        var bar = $(parent + " .current_bar").eq(i)
-        if (dragged) {
-            bar.addClass("bar_hovered");
-        } else {
-            bar.removeClass("bar_hovered");
-        }
-        if (!bar.length) {
-            bar = $(document.createElement("div")).addClass(
-                "current_bar");
-            $(parent).prepend(bar);
-        }
-        var current = all.eq(i);
-        var top = current.offset().top - $(parent).offset().top;
-        var left;
-        if (bar_pos > 0) {
-            left = bar_pos;
-        } else {
-            left = current.offset().left + (current.width() - bar.width()) /
-                days_of_month * date.getDate();
-        }
-        var header_height = current.outerHeight();
-        var margin_top = header_height + $(parent + " .type_header").height();
-        var height = $(parent + " .list").eq(i).height();
-
-        bar.css("margin-top", header_height + top - 1).css("left", left +
-            1).css("height", height - margin_top - 2);
-        addDraggable(bar);
-    });
-}
-
-function drawBars() {
-    drawBar("#season");
-    drawBar("#house");
-    drawBar("#store");
-    drawBar("#not");
 }
 
 function drawHeader() {
@@ -184,46 +144,6 @@ function drawNav() {
         item.appendChild(link);
         regSelection.appendChild(item);
     }
-}
-
-function addDraggable(bar) {
-    var left = bar.parent().offset().left + $(".name").outerWidth() - 1;
-    var right = bar.parent().offset().left + bar.parent().width() - bar
-        .outerWidth() -
-        1;
-    var width = right - left + 1;
-    bar.draggable({
-        axis: "x",
-        cursor: "move",
-        start: function() {
-            dragged = true;
-        },
-        drag: function(event, ui) {
-            if (ui.offset.left < left) {
-                ui.position.left = left;
-            }
-            if (ui.offset.left > right) {
-                ui.position.left = right;
-            }
-            bar_pos = ui.position.left;
-            var new_index = Math.floor((bar_pos - left) *
-                24 /
-                width);
-            if (new_index != index) {
-                index = new_index;
-                setTimeout(function() {
-                    if (index == new_index) {
-                        updateLists();
-                    }
-                }, 150);
-            }
-            drawBars();
-        },
-        stop: function() {
-            dragged = false;
-            drawBars();
-        }
-    });
 }
 
 function getName(item) {
@@ -361,6 +281,7 @@ var Table = function(label) {
         this.bodies[t] = tBody;
     }
     this.container.appendChild(table);
+    this.bars = new Bars(this);
 };
 
 Table.prototype.drawTableHeader = function(tHead, type) {
@@ -402,4 +323,75 @@ Table.prototype.updateBodies = function() {
         }
         this.bodies[t].appendChild(frag);
     }
+    this.bars.updateBars();
 };
+
+var Bars = function(table) {
+    this.table = table;
+    this.bars = new Array(table.bodies.length);
+
+    for (var t = 0; t < this.table.bodies.length; t++) {
+        this.bars[t] = document.createElement("div");
+        this.bars[t].className = "current_bar";
+        this.table.container.appendChild(this.bars[t]);
+        this.addDraggable(this.bars[t]);
+    }
+};
+
+Bars.prototype.addDraggable = function(domBar) {
+    var bar = $(domBar);
+    var left = bar.parent().offset().left + $(".name").outerWidth() - 1;
+    var right = bar.parent().offset().left + bar.parent().width() - bar
+        .outerWidth() -
+        1;
+    var width = right - left + 1;
+    bar.draggable({
+        axis: "x",
+        cursor: "move",
+        start: function() {
+            dragged = true;
+        },
+        drag: function(event, ui) {
+            if (ui.offset.left < left) {
+                ui.position.left = left;
+            }
+            if (ui.offset.left > right) {
+                ui.position.left = right;
+            }
+            bar_pos = ui.position.left;
+            var new_index = Math.floor((bar_pos - left) *
+                24 /
+                width);
+            if (new_index != index) {
+                index = new_index;
+                setTimeout(function() {
+                    if (index == new_index) {
+                        updateLists();
+                    }
+                }, 150);
+            }
+            updateBars();
+        },
+        stop: function() {
+            dragged = false;
+            updateBars();
+        }
+    });
+}
+
+Bars.prototype.updateBars = function() {
+    for (var t = 0; t < this.table.bodies.length; t++) {
+        var bar = this.bars[t];
+        var body = this.table.bodies[t];
+        bar.style.marginTop = body.marginTop;
+        bar.style.height = body.height;
+    }
+};
+
+function updateBars() { 
+    seasonTable.bars.updateBars();
+    houseTable.bars.updateBars();
+    storeTable.bars.updateBars();
+    notTable.bars.updateBars();
+
+}
