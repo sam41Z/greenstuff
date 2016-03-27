@@ -17,11 +17,13 @@ var scrollOffset;
 
 Bar.prototype.addDraggable = function() {
     var $bar = $(this.bar);
+    var $body = $(this.body);
     $bar.draggable({
         axis: 'x',
         cursor: 'move',
         start: function(event, ui) {
             dragged = true;
+            setBarsShadow(dragged);
             scrollOffset = ui.helper.offset().top - $(document)
                     .scrollTop();
         },
@@ -33,6 +35,7 @@ Bar.prototype.addDraggable = function() {
                 ui.position.left = barRight;
             }
             bar_pos = ui.position.left;
+            ui.position.top = $body.offset().top;
             var new_index = Math.floor((bar_pos - barLeft) * 24 /
                 (barRight - barLeft + 1));
             if (new_index != index) {
@@ -50,6 +53,7 @@ Bar.prototype.addDraggable = function() {
         },
         stop: function() {
             dragged = false;
+            setBarsShadow(dragged);
             updateBars();
         }
     });
