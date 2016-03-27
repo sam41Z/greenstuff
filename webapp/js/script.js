@@ -20,11 +20,11 @@ var barRight;
 // flag whether bar is dragged at the moment
 var dragged = false;
 
-$(function() {
+$(function () {
     loadSetup();
 });
 
-$(window).resize(function() {
+$(window).resize(function () {
     updateBars();
 });
 
@@ -42,31 +42,31 @@ function fileLoaded() {
 function loadFiles() {
     data = new Data();
     completed = 3;
-    $.getJSON('json/languages/' + setup.languageFile).done(function(json) {
+    $.getJSON('json/languages/' + setup.languageFile).done(function (json) {
         strings = json;
         $('title').text(strings.title);
         fileLoaded();
-    }).fail(function(jqxhr, textStatus, error) {
+    }).fail(function (jqxhr, textStatus, error) {
         console.log('error');
     });
 
-    $.getJSON('json/regions/' + setup.regionFile).done(function(json) {
+    $.getJSON('json/regions/' + setup.regionFile).done(function (json) {
         data.setData(json);
         fileLoaded();
-    }).fail(function(jqxhr, textStatus, error) {
+    }).fail(function (jqxhr, textStatus, error) {
         console.log('error');
     });
 
-    $.getJSON('json/types.json').done(function(json) {
+    $.getJSON('json/types.json').done(function (json) {
         data.setTypes(json);
         fileLoaded();
-    }).fail(function(jqxhr, textStatus, error) {
+    }).fail(function (jqxhr, textStatus, error) {
         console.log('error');
     });
 }
 
 function loadSetup() {
-    $.getJSON('json/setup.json', function(data) {
+    $.getJSON('json/setup.json', function (data) {
         setup = new Setup(data);
         loadFiles();
     });
@@ -121,8 +121,8 @@ function drawNav() {
         if (setup.languageFile == setup.languages[i].file) {
             link.className = 'dropdown_selected';
         }
-        link.onclick = function(j) {
-            return function() {
+        link.onclick = function (j) {
+            return function () {
                 setup.setLanguage(setup.languages[j].file);
             };
         }(i);
@@ -141,8 +141,8 @@ function drawNav() {
         if (setup.region == setup.regions[i].file) {
             link.className = 'dropdown_selected';
         }
-        link.onclick = function(j) {
-            return function() {
+        link.onclick = function (j) {
+            return function () {
                 setup.setRegion(setup.regions[j].file);
             };
         }(i);
@@ -166,6 +166,13 @@ var bars = new Array();
 function updateBars() {
     updateBarsVertical();
     updateBarsHorizontal()
+}
+
+function setBarsShadow(shadow) {
+    for (var i = 0; i < bars.length; i++) {
+        if (shadow) $(this.bars[i].bar).addClass('bar_hovered');
+        else $(this.bars[i].bar).removeClass('bar_hovered');
+    }
 }
 
 function updateBarsVertical() {
