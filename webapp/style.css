@@ -6239,6 +6239,7 @@ td.name {
 }
 .season {
   background-color: #357935;
+  text-shadow: 0 0 1px white;
 }
 .house {
   background-color: #a3d7a3;
@@ -6302,4 +6303,8 @@ a.dropdown_selected:hover {
 }
 .type_vegetables {
   background-color: #357935;
+  text-shadow: 0 0 1px white;
+}
+h3 {
+  margin: 8px;
 }
