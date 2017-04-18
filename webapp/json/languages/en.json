@@ -1,12 +1,12 @@
 {
     "legend": {
-        "season":"seasonal",
-        "house":"greenhouse",
-        "store": "storage",
-        "not":"not seasonal"
+        "season":"Seasonal",
+        "house":"Greenhouse",
+        "store": "Storage",
+        "not":"Not Seasonal"
     },
 
-        "navigation":{
+    "navigation":{
         "language":"Language",
         "region":"Region"
     },
@@ -21,25 +21,25 @@
     },
 
     "types":{
-        "fruits":"fruits",
-        "vegetables":"vegetables"
+        "fruits":"Fruits",
+        "vegetables":"Vegetables"
     },
 
-    "title":"seasons table",
+    "title":"Seasons Table",
 
     "region_names":{
-        "Middle Europe":""
+        "middle_europe":"Middle Europe"
     },
 
     "food_names":{
-        "apple":"apple",
-        "apricot":"apricot",
-        "artichoke":"artichoke",
-        "asparagus":"asparagus",
+        "apple":"Apple",
+        "apricot":"Apricot",
+        "artichoke":"Artichoke",
+        "asparagus":"Asparagus",
         "batavia_lettuce":"Batavia lettuce",
         "bear's_garlic":"Bear's garlic",
         "beetroot":"beetroot",
-        "black_salsify":"Black black_salsify",
+        "black_salsify":"Black Salsify",
         "borecole":"Borecole",
         "broccoli":"Broccoli",
         "brussels_sprouts":"Brussels Sprout",
@@ -65,10 +65,10 @@
         "grape":"Grape",
         "green_bean":"Green Bean",
         "green_onion":"Grenn Onion",
-        "iceberg_lettuce":"Iceberg iceberg_lettucee",
+        "iceberg_lettuce":"Iceberg Lettuce",
         "kiwi":"Kiwi",
         "kohlrabi":"Kohlrabi",
-        "lamb's_lettuce":"Lamb's romaine_lettuce",
+        "lamb's_lettuce":"Lamb's Lettuce",
         "leek":"Leek",
         "lettuce":"Lettuce",
         "lollo_lettuce":"Lollo Lettuce",

@@ -111,6 +111,7 @@ function drawLegend() {
 }
 
 function drawNav() {
+    $('#language_nav').html(strings.navigation.language + '<span class="caret"></span>')
     var langSelection = document.getElementById('language_selection');
     clearElement(langSelection);
     for (var i = 0; i < setup.languages.length; i++) {
@@ -130,6 +131,7 @@ function drawNav() {
         langSelection.appendChild(item);
     }
 
+    $('#region_nav').html(strings.navigation.region + '<span class="caret"></span>')
     var regSelection = document.getElementById('region_selection');
     clearElement(regSelection);
     for (var i = 0; i < setup.regions.length; i++) {
@@ -197,7 +199,7 @@ function updateBarsHorizontal() {
         if (bar_pos == 0) {
             computeBarBounds($body, $bar);
             var cellWidth = (barRight - barLeft) / 24;
-            bar_pos = barLeft + cellWidth * (index - 1) +
+            bar_pos = barLeft + cellWidth * (index) +
                 (cellWidth - $bar.outerWidth()) / 2;
         }
         $bar.css({
