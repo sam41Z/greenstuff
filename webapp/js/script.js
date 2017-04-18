@@ -8,7 +8,7 @@ var data;
 var date = new Date()
 var days_of_month = new Date(date.getFullYear(), date.getMonth() - 1, 0).getDate();
 // current index
-var index = date.getMonth() * 2 + ((date.getDay <= 15) ? 0 : 1);
+var index = date.getMonth() * 2 + ((date.getDate() <= 15) ? 0 : 1);
 
 // all strings
 var strings;
@@ -199,7 +199,7 @@ function updateBarsHorizontal() {
         if (bar_pos == 0) {
             computeBarBounds($body, $bar);
             var cellWidth = (barRight - barLeft) / 24;
-            bar_pos = barLeft + cellWidth * (index) +
+            bar_pos = barLeft + cellWidth * index +
                 (cellWidth - $bar.outerWidth()) / 2;
         }
         $bar.css({
