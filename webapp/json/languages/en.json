@@ -1,0 +1,105 @@
+{
+    "legend": {
+        "season":"Seasonal",
+        "house":"Greenhouse",
+        "store": "Storage",
+        "not":"Not Seasonal"
+    },
+
+    "navigation":{
+        "language":"Language",
+        "region":"Region"
+    },
+
+    "months":["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+
+    "content_titles": {
+        "season":"seasonal",
+        "house":"now from greenhouse",
+        "store":"now from storage",
+        "not":"nope, don't buy"
+    },
+
+    "types":{
+        "fruits":"Fruits",
+        "vegetables":"Vegetables"
+    },
+
+    "title":"Seasons Table",
+
+    "region_names":{
+        "middle_europe":"Middle Europe"
+    },
+
+    "food_names":{
+        "apple":"Apple",
+        "apricot":"Apricot",
+        "artichoke":"Artichoke",
+        "asparagus":"Asparagus",
+        "batavia_lettuce":"Batavia lettuce",
+        "bear's_garlic":"Bear's garlic",
+        "beetroot":"beetroot",
+        "black_salsify":"Black Salsify",
+        "borecole":"Borecole",
+        "broccoli":"Broccoli",
+        "brussels_sprouts":"Brussels Sprout",
+        "button_mushroom":"Button Mushroom",
+        "cabbage":"Cabbage",
+        "carrot":"Carrot",
+        "cauliflower":"Cauliflower",
+        "celeriac":"Celeriac",
+        "celery":"Celery",
+        "cherry":"Cherry",
+        "chestnut":"Chestnut",
+        "chicory":"Chicory",
+        "chinese_cabbage":"Chinese Cabbage",
+        "cucumber":"Cucumber",
+        "curly_kale":"Curly Kale",
+        "damson":"Damson",
+        "eggplant":"Eggplant",
+        "endive":"Endive",
+        "fennel":"Fennel",
+        "field_salad":"Field Salad",
+        "fig":"Fig",
+        "garlic":"Garlic",
+        "grape":"Grape",
+        "green_bean":"Green Bean",
+        "green_onion":"Grenn Onion",
+        "iceberg_lettuce":"Iceberg Lettuce",
+        "kiwi":"Kiwi",
+        "kohlrabi":"Kohlrabi",
+        "lamb's_lettuce":"Lamb's Lettuce",
+        "leek":"Leek",
+        "lettuce":"Lettuce",
+        "lollo_lettuce":"Lollo Lettuce",
+        "mangold":"Mangold",
+        "melon":"Melon",
+        "mirabelle":"Mirabelle",
+        "nectarine":"Nectarine",
+        "onion":"Onion",
+        "pak-choi":"Pak-Choi",
+        "paprika":"Paprika",
+        "parsley_root":"Porsley Root",
+        "parsnip":"Parsnip",
+        "peach":"Peach",
+        "pear":"Pear",
+        "plum":"Plum",
+        "potato":"Potato",
+        "pumpkin":"Pumpkin",
+        "quince":"Quince",
+        "radicchio":"Radicchio",
+        "radish":"Radish",
+        "red_oak_leaf_lettuce":"Road Oak Leaf Lettuce",
+        "rhubarb":"Rhubarb",
+        "rocket":"Rocket",
+        "romaine_lettuce":"Romain Lettuce",        
+        "savoy":"Savoy",
+        "snow_pea":"Snow Pea",
+        "spinach":"Spinach",
+        "strawberry":"Strawberry",
+        "sugarloaf":"Sugarloaf",
+        "tomato":"Tomato",
+        "walnut":"Walnut",
+        "zucchini":"Zucchini"
+    }
+}

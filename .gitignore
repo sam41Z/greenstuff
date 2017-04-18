@@ -5,3 +5,5 @@
 *.sublime-workspace
 gen/
 bin/
+.idea/
+*.iml
