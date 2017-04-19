@@ -49,6 +49,8 @@ function fileLoaded() {
 function loadFiles() {
     data = new Data();
     completed = 3;
+    console.log('load lang ' + setup.languageFile);
+
     $.getJSON('json/languages/' + setup.languageFile).done(function (json) {
         strings = json;
         $('title').text(strings.title);
