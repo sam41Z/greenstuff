@@ -3,6 +3,7 @@ var setup;
 
 // the data to be displayed
 var data;
+var dataJson;
 
 // current date
 var date = new Date()
@@ -21,6 +22,11 @@ var barRight;
 var dragged = false;
 
 $(function () {
+    $.ajaxSetup({beforeSend: function(xhr) {
+        if (xhr.overrideMimeType) {
+            xhr.overrideMimeType("application/json");
+        }
+    }});
     loadSetup();
 });
 
@@ -33,6 +39,7 @@ var completed = 3;
 function fileLoaded() {
     completed -= 1;
     if (completed === 0) {
+        data.setData(dataJson);
         createLists();
         drawHeader();
         updateLists();
@@ -51,7 +58,7 @@ function loadFiles() {
     });
 
     $.getJSON('json/regions/' + setup.regionFile).done(function (json) {
-        data.setData(json);
+        dataJson = json;
         fileLoaded();
     }).fail(function (jqxhr, textStatus, error) {
         console.log('error');
