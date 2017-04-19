@@ -1,0 +1,9 @@
+*.TRASH
+*.DS_STORE
+*.swp
+*.sublime-project
+*.sublime-workspace
+gen/
+bin/
+.idea/
+*.iml
